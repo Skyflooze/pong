@@ -3,8 +3,6 @@ class Raquettes:
     def __init__(self, direction):
         self._direction = direction
     
-        
-
     def set_direction(self,val):
         self._direction = val
 
