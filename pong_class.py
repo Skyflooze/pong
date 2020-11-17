@@ -5,8 +5,6 @@ class Raquettes:
         self.dx = 1
         self.dy = 1
     
-        
-
     def set_direction(self,val):
         self._direction = val
 
