@@ -1,5 +1,4 @@
 #pong
-#test
 
 
 from tkinter import *
