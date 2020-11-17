@@ -6,7 +6,7 @@ from pong_class import *
 
 largeur = 500
 hauteur = 300
-
+ unshalla
 
 
 def raquette1_haut(event):
@@ -27,10 +27,15 @@ def bouge():
 
  
 
+          
+
+
 root = Tk()
 canvas = Canvas(root, width=largeur, height=hauteur, background="black")
 
+
 x_raq1, y_raq1 = 3,125
+
 
 raquette1_canvas = canvas.create_rectangle(3, 125,  8, 175, width=1, fill="white", outline="")
 raquette2_canvas = canvas.create_rectangle(497, 125, 492, 175, width=1, fill="white", outline="")
@@ -43,10 +48,12 @@ canvas.bind_all('<o>', raquette2_haut)
 canvas.bind_all('<l>', raquette2_bas)
 
 v = StringVar()
-v.set("wesh")
+v.set("")
 canvas.pack()
 Label(root, textvariable=v).pack()
 v.set("")
+ 
+
 root.mainloop()
 bouge()
 test = Raquettes(10)
