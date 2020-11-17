@@ -2,6 +2,8 @@ class Raquettes:
     
     def __init__(self, direction):
         self._direction = direction
+        self.dx = 1
+        self.dy = 1
     
         
 
