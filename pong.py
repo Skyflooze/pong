@@ -1,6 +1,7 @@
 #pong
 
 from tkinter import *
+from pong_class import *
 
 largeur = 500
 hauteur = 300
@@ -18,20 +19,16 @@ def raquette2_haut(event):
 def raquette2_bas(event):
     canvas.move(raquette2_canvas,0,5)
 
-bx = 4
-by = 4
-
 
 def balle_move():
-    global bx, by
     score_j1 = 0
     score_j2 = 0
     if (canvas.coords(balle1)[3]>292) or (canvas.coords(balle1)[1]<10):
-        by=-1*by
+        mouv.by=-1*mouv.by
     if (canvas.coords(balle1)[3]>canvas.coords(raquette1_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette1_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette1_canvas)[0]):
-        bx=-1*bx
+        mouv.bx=-1*mouv.bx
     if (canvas.coords(balle1)[3]>canvas.coords(raquette2_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette2_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette2_canvas)[0]):
-        bx=-1*bx
+        mouv.bx=-1*mouv.bx
     if (canvas.coords(balle1)[0]<0):
         canvas.delete(ALL)
         text.insert(INSERT, "GAME OVER\n")
@@ -46,13 +43,14 @@ def balle_move():
         text.insert(INSERT, f"Score du joueur 1 : {score_j2}")
     
 
-    canvas.move(balle1,bx,by)
+    canvas.move(balle1,mouv.bx,mouv.by)
     root.after(20,balle_move)
 
 
 
 root = Tk()
 text = Text(root)
+mouv = Raquettes()
 
 canvas = Canvas(root, width=largeur, height=hauteur, background="black")
 raquette1_canvas = canvas.create_rectangle(6, 125,  11, 175, width=1, fill="white", outline="")
