@@ -43,7 +43,7 @@ def balle_move():
         text.pack()
         canvas.delete(ALL)
         score_j2 += 1
-        text.insert(INSERT, f"Score du joueur 2 : {score_j1}")
+        text.insert(INSERT, f"Score du joueur 1 : {score_j2}")
     
 
     canvas.move(balle1,bx,by)
