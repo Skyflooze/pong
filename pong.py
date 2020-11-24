@@ -23,13 +23,25 @@ def raquette2_bas(event):
 dx = 5
 dy = 5
 
+
 def balle_move():
     global dx, dy
-    
-    if (canvas.coords(balle1)[3]>292) or (canvas.coords(balle1)[1]<0):
+    score_j1 = 0
+    score_j2 = 0
+    if (canvas.coords(balle1)[3]>292) or (canvas.coords(balle1)[1]<10):
         dy=-1*dy
-    if (canvas.coords(balle1)[0]<0) or (canvas.coords(balle1)[2]>500):
+    if (canvas.coords(balle1)[3]>canvas.coords(raquette1_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette1_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette1_canvas)[0]):
         dx=-1*dx
+    if (canvas.coords(balle1)[3]>canvas.coords(raquette2_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette2_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette2_canvas)[0]):
+        dx=-1*dx
+    if (canvas.coords(balle1)[0]<0):
+        score_j1 += 1
+        v.set(f"Score du joueur 2 : {score_j1}")
+    if (canvas.coords(balle1)[2]>500):
+        score_j2 += 1
+        v.set(f"Score du joueur 1 : {score_j2}")
+
+
     
     canvas.move(balle1,dx,dy)
     root.after(20,balle_move)
@@ -53,9 +65,10 @@ canvas.bind_all('<o>', raquette2_haut)
 canvas.bind_all('<l>', raquette2_bas)
 
 v = StringVar()
-v.set("")
+
+label_score = Label(root, text = "score")
+label_score.pack()
 canvas.pack()
 Label(root, textvariable=v).pack()
-v.set("")
 balle_move()
 root.mainloop()
