@@ -1,11 +1,9 @@
 #pong
 
-
 from tkinter import *
 
 largeur = 500
 hauteur = 300
-
 
 
 def raquette1_haut(event):
@@ -36,30 +34,32 @@ def balle_move():
         bx=-1*bx
     if (canvas.coords(balle1)[0]<0):
         canvas.delete(ALL)
+        text.insert(INSERT, "GAME OVER\n")
+        text.pack()
         score_j1 += 1
-        v.set(f"Score du joueur 2 : {score_j1}")
+        text.insert(INSERT, f"Score du joueur 2 : {score_j1}")
     if (canvas.coords(balle1)[2]>500):
+        text.insert(INSERT, "GAME OVER\n")
+        text.pack()
         canvas.delete(ALL)
         score_j2 += 1
-        v.set(f"Score du joueur 1 : {score_j2}")
-
-
+        text.insert(INSERT, f"Score du joueur 2 : {score_j1}")
     
+
     canvas.move(balle1,bx,by)
     root.after(20,balle_move)
 
 
 
 root = Tk()
+text = Text(root)
+
 canvas = Canvas(root, width=largeur, height=hauteur, background="black")
-
-
 raquette1_canvas = canvas.create_rectangle(6, 125,  11, 175, width=1, fill="white", outline="")
 raquette2_canvas = canvas.create_rectangle(497, 125, 492, 175, width=1, fill="white", outline="")
 balle1 = canvas.create_oval(240,120,260,140,fill='red')
 bord_haut = canvas.create_rectangle(0, 0, 503, 10, fill='green')
 bord_bas = canvas.create_rectangle(0, 292, 503, 302, fill='green')
-
 
 canvas.bind_all('<z>', raquette1_haut)
 canvas.bind_all('<s>', raquette1_bas)
