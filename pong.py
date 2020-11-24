@@ -20,30 +20,32 @@ def raquette2_haut(event):
 def raquette2_bas(event):
     canvas.move(raquette2_canvas,0,5)
 
-dx = 5
-dy = 5
+bx = 5
+by = 5
 
 
 def balle_move():
-    global dx, dy
+    global bx, by
     score_j1 = 0
     score_j2 = 0
     if (canvas.coords(balle1)[3]>292) or (canvas.coords(balle1)[1]<10):
-        dy=-1*dy
+        by=-1*by
     if (canvas.coords(balle1)[3]>canvas.coords(raquette1_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette1_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette1_canvas)[0]):
-        dx=-1*dx
+        bx=-1*bx
     if (canvas.coords(balle1)[3]>canvas.coords(raquette2_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette2_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette2_canvas)[0]):
-        dx=-1*dx
+        bx=-1*bx
     if (canvas.coords(balle1)[0]<0):
+        canvas.delete(ALL)
         score_j1 += 1
         v.set(f"Score du joueur 2 : {score_j1}")
     if (canvas.coords(balle1)[2]>500):
+        canvas.delete(ALL)
         score_j2 += 1
         v.set(f"Score du joueur 1 : {score_j2}")
 
 
     
-    canvas.move(balle1,dx,dy)
+    canvas.move(balle1,bx,by)
     root.after(20,balle_move)
 
 
