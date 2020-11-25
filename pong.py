@@ -1,11 +1,9 @@
 #pong
-
 from tkinter import *
 from pong_class import *
 
 largeur = 500
 hauteur = 300
-
 
 def raquette1_haut(event):
     canvas.move(raquette1_canvas,0,-5)
@@ -21,36 +19,34 @@ def raquette2_bas(event):
 
 
 def balle_move():
-    score_j1 = 0
-    score_j2 = 0
     if (canvas.coords(balle1)[3]>292) or (canvas.coords(balle1)[1]<10):
-        mouv.by=-1*mouv.by
+        raq.by=-1*raq.by
     if (canvas.coords(balle1)[3]>canvas.coords(raquette1_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette1_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette1_canvas)[0]):
-        mouv.bx=-1*mouv.bx
+        raq.bx=-1*raq.bx
+        raq.bx = raq.bx*1.1
     if (canvas.coords(balle1)[3]>canvas.coords(raquette2_canvas)[1]) and (canvas.coords(balle1)[0]<canvas.coords(raquette2_canvas)[2]) and (canvas.coords(balle1)[2]>canvas.coords(raquette2_canvas)[0]):
-        mouv.bx=-1*mouv.bx
+        raq.bx=-1*raq.bx
+        raq.bx = raq.bx*1.1
     if (canvas.coords(balle1)[0]<0):
-        canvas.delete(ALL)
-        text.insert(INSERT, "GAME OVER\n")
-        text.pack()
-        score_j1 += 1
-        text.insert(INSERT, f"Score du joueur 2 : {score_j1}")
+        raq.scorej1 += 1
+        est_mort()
     if (canvas.coords(balle1)[2]>500):
-        text.insert(INSERT, "GAME OVER\n")
-        text.pack()
-        canvas.delete(ALL)
-        score_j2 += 1
-        text.insert(INSERT, f"Score du joueur 1 : {score_j2}")
+        raq.scorej2 += 1
+        est_mort()
+
+    canvas.move(balle1,raq.bx,raq.by)
+    root.after(20,balle_move)
     
 
-    canvas.move(balle1,mouv.bx,mouv.by)
-    root.after(20,balle_move)
-
-
-
+def est_mort():
+    canvas.delete(ALL)
+    text.insert(INSERT, "GAME OVER\n")
+    text.pack()
+    text.insert(INSERT, f"Score du joueur 1 : {raq.scorej1}\nScore du joueur 2 : {raq.scorej2}")
+    
 root = Tk()
 text = Text(root)
-mouv = Raquettes()
+raq = Raquettes()
 
 canvas = Canvas(root, width=largeur, height=hauteur, background="black")
 raquette1_canvas = canvas.create_rectangle(6, 125,  11, 175, width=1, fill="white", outline="")
