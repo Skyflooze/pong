@@ -6,7 +6,7 @@ largeur = 500
 hauteur = 300
 
 def raquette1_haut(event):
-    if (canvas.coords(raquette1_canvas)[1]<=0):
+    if (canvas.coords(raquette1_canvas)[1]<=10):
         canvas.move(raquette1_canvas,0,0)
     else:
         canvas.move(raquette1_canvas,0,-5)
@@ -18,7 +18,7 @@ def raquette1_bas(event):
         canvas.move(raquette1_canvas,0,5)
 
 def raquette2_haut(event):
-    if (canvas.coords(raquette2_canvas)[1]<=0):
+    if (canvas.coords(raquette2_canvas)[1]<=10):
         canvas.move(raquette2_canvas,0,0)
     else:
         canvas.move(raquette2_canvas,0,-5)
