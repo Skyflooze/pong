@@ -1,53 +1,144 @@
-class Raquette:
-    
-    def __init__(self, direction):
-        self.bx = 4
-        self.by = 4
-        self.corps = []
-        self._direction = direction
-
-    def set_direction(self,val):
-        self._direction = val
-
-    def get_direction(self):
-        return self._direction
-
-    direction = property(get_direction, set_direction)
-
-    def apparence(self):
-        self.forme = ([(6,125),(11,125),(6,175),(11,175)],[(497,125),(492,125),(497,175),(492,175)])
-
-    def remplir_corps(self):
-        self.cd=0
-        self.corps = [
-            [(apparence[0][0]*self.step+self.cd[0]),(apparence[0][1]*self.step+self.cd[1])]]
+from tkinter import *
 
 class Game:
-    def __init__(self,step):
-        self.step = step
-'''
-class Game:
+    def __init__(self):
+        self.pressed = {}
+        self._interface()
 
-    def init(self):
-        self.interface()
-        self.scorej1 = 0
-        self.scorej2 = 0
-        self.largeur = 500
-        self.hauteur = 300
+    def start(self):
+        self._animate()
+        self.root.mainloop()
 
-    def interface(self):
+    def _interface(self):
         self.root = Tk()
-        self.text = Text(self.root)
-        self.canvas = Canvas(self.root, width=self.largeur, height=self.hauteur, background="black")
-        self.raquette1 = self.canvas.create_rectangle(6, 125,  11, 200, width=1, fill="white", outline="")
-        self.raquette2 = self.canvas.create_rectangle(497, 125, 492, 200, width=1, fill="white", outline="")
-        self.balle = self.canvas.create_oval(240,120,260,140,fill='white')
-        self.bordHaut = self.canvas.create_rectangle(0, 0, 503, 10, fill='green')
-        self.bordBas = self.canvas.create_rectangle(0, 292, 503, 302, fill='green')
+        self.raquette1label = Label(text="score j1 :", anchor="nw")
+        self.raquette2label = Label(text="score j2 :", anchor="nw")
+        self.canvas = Canvas(width=1000, height=600, background="black")
+        
 
-    def est_mort(self):
-        self.canvas.delete(ALL)
-        self.text.insert(INSERT, "GAME OVER")
-        self.text.pack()
-        self.text.insert(INSERT, f"Score du joueur 1 : {self.scorej1}\nScore du joueur 2 : {self.scorej2}")
-'''
+        self.raquette1label.pack(side="top", fill="x")
+        self.raquette2label.pack(side="top", fill="x")
+        self.canvas.pack(side="top", fill="both", expand="true")
+
+        self.barre_milieu = Barre(self.canvas, tag="barre_milieu", color="white", x=500, y=280)
+        self.bord_haut = Bord(self.canvas, tag="bord_haut", color="green", x=220, y=10)
+        self.bord_bas = Bord(self.canvas, tag="bord_bas", color="green", x=220, y=613)
+        self.raquette1 = Raquette(self.canvas, tag="raquette1", color="white", x=15 , y=280)
+        self.raquette2 = Raquette(self.canvas, tag="raquette2", color="white", x=1000, y=280)
+        self.balle = Balle(self.canvas, tag="balle", color="red", x=510, y=280)
+        
+        
+
+        self._set_bindings()
+
+    def _animate(self):
+        print(self.pressed)
+        if self.pressed["z"]: 
+            self.raquette1.move_up()
+            self.raquette1.redraw()
+        if self.pressed["s"]: 
+            self.raquette1.move_down()
+            self.raquette1.redraw()
+        if self.pressed["o"]: 
+            self.raquette2.move_up()
+            self.raquette2.redraw()
+        if self.pressed["l"]: 
+            self.raquette2.move_down()
+            self.raquette2.redraw()
+        
+        self.raquette2.redraw()
+        self.root.after(20, self._animate)
+
+    def _set_bindings(self):
+        for char in ["z","s","o", "l"]:
+            self.root.bind("<KeyPress-%s>" % char, self._pressed)
+            self.root.bind("<KeyRelease-%s>" % char, self._released)
+            self.pressed[char] = False
+
+    def _pressed(self, event):
+        self.pressed[event.char] = True
+
+    def _released(self, event):
+        self.pressed[event.char] = False
+
+class Raquette:
+    def __init__(self, canvas, tag, color="white", x=0, y=0):
+        self.canvas = canvas
+        self.tag = tag
+        self.x = x
+        self.y = y
+        self.color = color
+        self.redraw()
+
+    def move_up(self):
+        self.y = max(self.y -5, 30)
+
+    def move_down(self):
+        self.y = min(self.y + 5, 523)
+
+    def redraw(self):
+        x0 = self.x - 10
+        x1 = self.x - 3
+        y0 = self.y - 20
+        y1 = self.y + 70
+        self.canvas.delete(self.tag)
+        self.canvas.create_rectangle(x0,y0,x1,y1,tags=self.tag, fill=self.color)
+
+class Balle:
+    def __init__(self, canvas, tag, color="red", x=0, y=0):
+        self.canvas = canvas
+        self.tag = tag
+        self.x = x
+        self.y = y
+        self.color = color
+        self.redraw()
+        bx = 0
+        by = 0
+
+    def redraw(self):
+        x0 = self.x - 20
+        x1 = self.x
+        y0 = self.y - 10
+        y1 = self.y + 10
+        self.canvas.delete(self.tag)
+        self.canvas.create_oval(x0,y0,x1,y1,tags=self.tag, fill=self.color)
+
+
+class Barre:
+    def __init__(self, canvas, tag, color="white", x=0, y=0):
+        self.canvas = canvas
+        self.tag = tag
+        self.x = x
+        self.y = y
+        self.color = color
+        self.redraw()
+
+    def redraw(self):
+        x0 = self.x - 5
+        x1 = self.x + 5
+        y0 = self.y - 350
+        y1 = self.y + 350
+        self.canvas.delete(self.tag)
+        self.canvas.create_rectangle(x0,y0,x1,y1,tags=self.tag, fill=self.color)
+
+class Bord:
+    def __init__(self, canvas, tag, color="green", x=0, y=0):
+        self.canvas = canvas
+        self.tag = tag
+        self.x = x
+        self.y = y
+        self.color = color
+        self.redraw()
+
+    def redraw(self):
+        x0 = self.x - 1000
+        x1 = self.x + 1000
+        y0 = self.y - 20
+        y1 = self.y 
+        self.canvas.delete(self.tag)
+        self.canvas.create_rectangle(x0,y0,x1,y1,tags=self.tag, fill=self.color)
+
+        
+       
+
+
